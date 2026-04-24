@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<form>
+URL steam 1 <input type="text" required id="id1"/><br />
+URL steam 2 <input type="text" required id="id2"/><br />
+<button>meow?</button>
+<div id="result">
+</div>
+</form>
+<script>
+const button = document.querySelector("button");
+const result = document.getElementById("result");
+const first = document.getElementById("id1");
+const second = document.getElementById("id2");
+button.addEventListener("click", (event) => {
+  event.preventDefault();
+  const re = new RegExp("https:\\/\\/steamcommunity\\.com\\/(id|profiles)\\/(\\w*)\\/?");
+  let _first = re.exec(first.value)[2];
+  let _second = re.exec(second.value)[2];
+  result.innerHTML="loading!";
+  fetch('https://YOUR_API_URL/meow/'+_first+'/'+_second+'/').then(response => {
+  return response.json();
+}).then(data => {
+  // Work with JSON data here
+  score = data.score * 100;
+  result.innerHTML="score:"+score+"%";;
+}).catch(err => {
+  // Do something for an error here
+});
+});
+</script>
+</body>
+</html>
