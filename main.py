@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
 app = FastAPI()
+steam = Steam("YOUR_API_KEY")
 
 def print_genres(genres):
 	out = []
@@ -22,7 +23,6 @@ def home():
 
 @app.get('/meow/{user1}/{user2}/')
 def get_score(user1: str, user2: str):
-	steam = Steam("YOUR_API_KEY")
 	output = {}
 	users = [user1, user2]
 	divs = {}
