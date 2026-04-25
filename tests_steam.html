@@ -1,15 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+body {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+}
+br {
+   display: block;
+   margin: 10px 0;
+}
+.content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+</style>
 </head>
 <body>
+<div class="content">
+<b>Both Steam accounts should be set to public!</b><br />
 <form>
-URL steam 1 <input type="text" required id="id1"/><br />
-URL steam 2 <input type="text" required id="id2"/><br />
-<button>meow?</button>
+URL steam 1  <input type="text" required id="id1" size="42"/><br />
+URL steam 2  <input type="text" required id="id2" size="42"/><br />
+<button>Let's try lol</button>
 <div id="result">
 </div>
 </form>
+</div>
 <script>
 const button = document.querySelector("button");
 const result = document.getElementById("result");
