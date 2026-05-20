@@ -23,14 +23,27 @@ br {
 <div class="content">
 <b>Both Steam accounts should be set to public!</b><br />
 <form>
-URL steam 1  <input type="text" required id="id1" size="42"/><br />
-URL steam 2  <input type="text" required id="id2" size="42"/><br />
+<div id="input-1">URL steam 1  <input type="text" required id="id1" size="42"/><br /></div>
+<div id="input-2">URL steam 2  <input type="text" required id="id2" size="42"/><br /></div>
 <button>Let's try lol</button>
 <div id="result">
 </div>
 </form>
 </div>
 <script>
+function hash(id1, id2) {
+  let hash = 0;
+  for (const char of id1) {
+    hash = (hash << 5) - hash + char.charCodeAt(0);
+    hash |= 0;
+  }
+  for (const char of id2) {
+    hash = (hash << 5) - hash + char.charCodeAt(0);
+    hash |= 0;                              
+  }
+  return Math.abs(hash);
+}
+
 const button = document.querySelector("button");
 const result = document.getElementById("result");
 const first = document.getElementById("id1");
@@ -40,8 +53,11 @@ button.addEventListener("click", (event) => {
   const re = new RegExp("https:\\/\\/steamcommunity\\.com\\/(id|profiles)\\/(\\w*)\\/?");
   let _first = re.exec(first.value)[2];
   let _second = re.exec(second.value)[2];
+  let _key = hash(_first, _second).toString();
   result.innerHTML="loading!";
-  fetch('https://YOUR_API_URL/meow/'+_first+'/'+_second+'/').then(response => {
+  let url = "https://vapeur.ellana.eu/meow/"+_first+"/"+_second+"/"+_key;
+  console.log(url);
+  fetch(url).then(response => {
   return response.json();
 }).then(data => {
   // Work with JSON data here

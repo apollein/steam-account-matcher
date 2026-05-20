@@ -6,7 +6,9 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
 app = FastAPI()
-steam = Steam("YOUR_API_KEY")
+f = open("{}/tests_steam.html".format(os.getcwd()), "r")
+home_content = f.read()
+f.close()
 
 def print_genres(genres):
 	out = []
@@ -14,19 +16,25 @@ def print_genres(genres):
 		out.append(genre['description'])
 	return out
 
+def check_hash(hash):
+	try:
+		num = int(hash)
+		return num < 2147483647
+	except:
+		return False
+
 @app.get('/', response_class=HTMLResponse)
 def home():
-	f = open("tests_steam.html", "r")
-	content = f.read()
-	f.close()
-	return content
+	return home_content
 
-@app.get('/meow/{user1}/{user2}/')
-def get_score(user1: str, user2: str):
-	output = {}
+@app.get('/meow/{user1}/{user2}/{hash}')
+def get_score(user1: str, user2: str, hash: str):
+	if not check_hash(hash):
+		return {}
+	steam = Steam("YOUR_API_KEY")
+	output = {'hash': hash}
 	users = [user1, user2]
 	divs = {}
-
 	for _user in users:
 		try:
 			user = steam.users.search_user(_user)
@@ -52,7 +60,6 @@ def get_score(user1: str, user2: str):
 					genres_total+=1
 		for genre in genres_ranking:
 			divs[_user].append((genres_ranking[genre]/genres_total)*100.0)
-		time.sleep(0.042)
 		sorted_genres_ranking={k: v for k, v in sorted(genres_ranking.items(), key=lambda item: item[1], reverse=True)}
 		output[_user]['metadata'] = []
 		for genre in sorted_genres_ranking:
@@ -62,5 +69,5 @@ def get_score(user1: str, user2: str):
 	ent1 = entropy(divs[users[1]])
 	output[users[0]]["entropy"] = entropy(divs[users[0]])
 	output[users[1]]["entropy"] = entropy(divs[users[1]])
-	output["score"] = abs(abs(ent0-ent1)-1)
+	output["score"] = format(abs(abs(ent0-ent1)-1), ".2f")
 	return output
