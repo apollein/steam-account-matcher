@@ -69,5 +69,5 @@ def get_score(user1: str, user2: str, hash: str):
 	ent1 = entropy(divs[users[1]])
 	output[users[0]]["entropy"] = entropy(divs[users[0]])
 	output[users[1]]["entropy"] = entropy(divs[users[1]])
-	output["score"] = format(abs(abs(ent0-ent1)-1), ".2f")
+	output["score"] = format(abs(abs(ent0-ent1)-1), ".4f")
 	return output
