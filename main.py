@@ -52,7 +52,10 @@ def get_score(user1: str, user2: str, hash: str):
 			appid = game['appid']
 			game_details = steam.apps.get_app_details(appid, filters="genres")
 			if 'data' in game_details[str(appid)]:
-				genres = print_genres(game_details[str(appid)]['data']['genres'])
+				if "genres" in game_details[str(appid)]['data']:
+					genres = print_genres(game_details[str(appid)]['data']['genres'])
+				else:
+					genres = []
 				for genre in genres:
 					if genre not in genres_ranking:
 						genres_ranking[genre]=0
